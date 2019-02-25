@@ -13,7 +13,6 @@ public class ThreeSum {
         // 排序
         Arrays.sort(nums);
 
-        Map<Integer, HashSet<Integer>> rsMap = new HashMap<>();
         List<List<Integer>> rs = new ArrayList<>();
 
         int i = 0, left = 1, right = nums.length - 1;
@@ -26,32 +25,36 @@ public class ThreeSum {
                 }
 
                 if (-nums[i] == nums[left] + nums[right]) {
-                    boolean add = true;
+                    rs.add(Arrays.asList(nums[i], nums[left], nums[right]));
 
-                    // 去重
-                    if (rsMap.containsKey(nums[i])) {
-                        HashSet<Integer> rsValue = rsMap.get(nums[i]);
-                        if (rsValue.contains(nums[left]) || rsValue.contains(nums[right])) {
-                            add = false;
-                        }
-                    }
-
-                    if (add) {
-                        rs.add(Arrays.asList(nums[i], nums[left], nums[right]));
-
-                        if (rsMap.containsKey(nums[i])) {
-                            rsMap.get(nums[i]).add(nums[left]);
-                        } else {
-                            HashSet<Integer> integers = new HashSet<>();
-                            integers.add(nums[left]);
-
-                            rsMap.put(nums[i], integers);
-                        }
-                    }
-
+                    // 过滤同一结果内重复的数字
                     // 左右指针继续向中间移动
-                    left++;
-                    right--;
+                    while (true) {
+                        if (left >= nums.length - 1) {
+                            break;
+                        }
+
+                        if (nums[left] != nums[left + 1]) {
+                            left++;
+                            break;
+                        } else {
+                            left++;
+                        }
+                    }
+
+                    while (true) {
+                        if (right <= 0) {
+                            break;
+                        }
+
+                        if (nums[right] != nums[right - 1]) {
+                            right--;
+                            break;
+                        } else {
+                            right--;
+                        }
+                    }
+
                     continue;
                 }
 
@@ -66,7 +69,21 @@ public class ThreeSum {
                 }
             }
 
-            i++;
+            // 过滤同一结果值的数字
+            while (true) {
+                if (i >= nums.length - 1) {
+                    break;
+                }
+
+                if (nums[i] != nums[i + 1]) {
+                    i++;
+                    break;
+                } else {
+                    i++;
+                }
+            }
+
+            //i++;
             left = i + 1;
             right = nums.length - 1;
         }
@@ -75,7 +92,7 @@ public class ThreeSum {
     }
 
     public static void main(String[] args) {
-        int[] nums = new int[]{-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6};
+        int[] nums = new int[]{0,0,0};
 
         solution(nums);
     }

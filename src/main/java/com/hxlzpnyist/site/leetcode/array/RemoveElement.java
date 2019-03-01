@@ -10,63 +10,56 @@ package com.hxlzpnyist.site.leetcode.array;
 public class RemoveElement {
 
     public static int solution(int[] nums, int val) {
-        if (nums.length == 0) {
-            return 0;
-        }
+        int i = 0, count = nums.length, j = count;
 
-        if (nums.length == 1 && nums[0] == val) {
-            return 0;
-        }
-
-        if (nums.length == 1 && nums[0] != val) {
-            return 1;
-        }
-
-        int i = 0, j = nums.length - 1;
-
-        while (i + 1 <= j) {
-
-            while (true) {
+        while (true) {
+            while (i < j) {
                 if (nums[i] == val) {
+                    count--;
                     break;
-                }
-
-                if (i + 1 <= j) {
-                    i++;
                 } else {
-                    break;
+                    // 左右指针交汇时退出
+                    if (i + 1 == j) {
+                        break;
+                    }
+
+                    i++;
                 }
             }
 
-            while (true) {
-                if (nums[j] != val) {
-                    // 完成交换
+            while (j > i) {
+                j--;
+
+                // 左右指针交汇时退出
+                if (j == i) {
+                    break;
+                }
+
+                if (nums[j] == val) {
+                    count--;
+                } else {
                     int temp = nums[j];
 
                     nums[j] = nums[i];
                     nums[i] = temp;
 
-                    break;
-                }
+                    i++;
 
-                if (j - 1 >= i) {
-                    j--;
-                } else {
                     break;
                 }
             }
+
+            if (i == j) {
+                break;
+            }
+
         }
 
-        if (i == nums.length - 1) {
-            // 到达末尾
-            return nums[i] == val ? i : i + 1;
-        } else {
-            return nums[i] == val ? i : i - 1;
-        }
+        return count;
     }
 
     public static void main(String[] args) {
-        System.out.println(RemoveElement.solution(new int[]{3, 3}, 5));
+        System.out.println(RemoveElement.solution(new int[]{5,3}, 3));
     }
 
 
